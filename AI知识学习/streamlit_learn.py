@@ -2,6 +2,18 @@
 import streamlit as st
 from deepseek_2 import chat_stream
 
+if "authenticated" not in st.session_state:
+    st.session_state.authenticated = False
+
+if not st.session_state.authenticated:
+    pwd = st.text_input("请输入访问密码", type="password")
+    if pwd == st.secrets.get("APP_PASSWORD"):
+        st.session_state.authenticated = True
+        st.rerun()
+    elif pwd:
+        st.error("密码错误")
+    st.stop()
+
 st.set_page_config(page_title="DeepSeek Chat", page_icon= "./鲸鱼娘.png")
 st.title(" 与 神 对话")
 
