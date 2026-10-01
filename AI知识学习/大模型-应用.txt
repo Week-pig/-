@@ -1,0 +1,78 @@
+大模型-应用
+一、网络基础知识:
+网络：互联网（Internet）就是由无数个计算机网络设备连接起来形成的全球性的网络基础设施
+IP地址：设备在网络中的地址，每一个连入网络的设备都有一个自己的IP地址，用来定位在互联网中的位置
+	IPV4地址：32位二进制   132.12.86.125  每一段取值范围在0-255
+	   IPV6地址：128位二进制
+	127.0.0.1 表示本机地址（也称本机回环地址）
+域名（Domain Name）：是由一串用点分隔的英文字母组成的。IP地址不便于记忆，因此设计出了域名，并通过DNS（域名解析服务器）来将域名和IP地址相互映射，便于记忆和访问
+	localhost为本机域名
+
+端口：端口号（Port）是整数，取值范围在0-65535，是用来 标识计算机设备中的运行中的程序
+	HTTP协议默认端口号为80，HTTPS协议默认端口号443
+
+
+客户端  （输入域名）——>DNS（将域名映射成IP地址）——>交换机——>服务端（通过端口访问该设备上的应用程序110.242.69.21：443）
+
+二、网络模型： 
+OSI网络模型：全球网络互联标准模型 应用层>表示层>会话层>传输层>网络层>数据链路层>物理层
+TCP/IP网络模型：可以认为是OSI的简化版
+	应用层（HTTP、FTP、SMTP）>传输层（UDP、TCP）>网络层（IP）>网络接口层
+	应用层：将用户与应用程序交互的数据按照指定协议格式封装，封装好后调用传输层API将封装的数据移交给传输层
+	传输层：将数据包准确传输给另一台设备上的应用程序，通过端口将数据包准确交给指定的应用程序
+	网络层：基于IP地址将数据包路由给对应设备
+	网络接口层：负责数据在物理网络中的传输，处理与硬件设备交互
+
+HTTP协议（Hyper Text Transfer Protocol）：超文本传输协议，规定了客户端和服务器之间传输的规则（只有在请求及响应中都遵循了投以的规则，服务端才能读懂客户端发过来的请求，客户端才能解析服务端响应的结果）
+	特点：1.基于文本的协议：请求和响应的部分的协议内容为文本格式，底层通过TCP协议传输，稳定性强
+	2.基于请求-响应模型：一次封装对应一次请求，必须由客户端发起请求，服务端才会响应
+	3.无状态：端不会记忆与客户端的历史交互信息，每次请求和响应都是独立的
+
+HTTP协议 请求数据格式
+
+POST /api/courses HTTP/1.1
+Accept: application/json, text/plain, */*
+Accept-Encoding: gzip, deflate, br, zstd
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6
+Connection: keep-alive
+Content-Length: 139
+Content-Type: application/json
+Host: localhost:90
+Origin: http://localhost:90
+Referer: http://localhost:90/resource/course
+Sec-Fetch-Dest: empty
+Sec-Fetch-Mode: cors
+Sec-Fetch-Site: same-origin
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/143.0.0.0
+
+{"phone":"18808088080","channel":"1","name":"虎跑","gender":"1","age":"32"}
+
+
+	POST /api/courses HTTP/1.1
+	请求行 POST是请求方式  /api/courses是资源路径  HTTP/1.1是协议
+	请求方式：GET：求参数在请求行中，没有请求体。如：/api/course?name=Python&status=1,
+				GET请求 请求参数大小在参数大小在浏览器中是有限制的通常不超过几M
+			POST：请求参数在请求体中，POST请求大小是没有限制的
+				请求体：{"phone":"18808088080","channel":"1","name":"虎跑","gender":"1","age":"32"}
+	
+
+	Accept到User-Agent是请求头(格式key:value)
+
+HTTP协议 响应数据格式
+
+HTTP/1.1 200
+Server: nginx/1.24.0
+Date: Tue, 16 Dec 2025 12:38:08 GMT
+Content-Type: application/json
+Transfer-Encoding: chunked
+Connection: keep-alive
+
+{code: 1, msg: "sucess", date: null}
+
+	HTTP/1.1 200
+	响应行(协议、状态码) 200：客户端请求成功； 400：请求参数错误； 404：请求资源不存在，url输入有误或者网站资源	被删除了； 500：服务器发生了不可预期的错误
+
+	Server到Connection：响应头（格式key：value）
+
+	{code: 1, msg: "sucess", date: null}
+	响应体：存放服务器相应的数据

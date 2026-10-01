@@ -1,0 +1,15 @@
+大模型调用-接口测试
+
+Json格式：(JavaScript Object Notation)是前端的一种对象表示方式。表示形式类似与Python中的字典，都是kry:value这种形式，不过   -所有的key都必须使用双引号引起来-   ，值可以是任何类型：
+{
+	"model": "deepseek-chat",
+	"messages": [
+		{"role": "system", "connect": "You are a helpful assistant."},
+		{"role": "user", "connect": "Hello!"}
+	],
+	"stream": false
+}
+
+会话记忆处理方案（会话历史滚雪球）
+将上文问题的问答复制到新对话，再提出新问题
+劣势:token的额度也滚雪球增长
